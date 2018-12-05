@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/linear_search_element">
+
+    <EditText
+        android:id="@+id/edit_search_by_name"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="@string/enter_name"/>
+
+    <EditText
+        android:id="@+id/edit_search_by_price"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="@string/enter_price"/>
+
+    <Button
+        android:id="@+id/button_search_by_date"
+        android:text="@string/enter_date"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <Button
+        android:id="@+id/button_search_by_params"
+        android:text="@string/search_by_params"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+</LinearLayout>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="100">
+
+    <ImageView
+        android:id="@+id/image_event"
+        android:layout_weight="30"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <LinearLayout
+        android:layout_weight="70"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:weightSum="100">
+
+        <EditText
+            android:id="@+id/edit_name_event"
+            android:hint="@string/enter_name"
+            android:textSize="25dp"
+            android:layout_weight="14"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+
+        <Spinner
+            android:id="@+id/spinner_category"
+            android:textSize="25dp"
+            android:entries="@array/category"
+            android:layout_weight="14"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+
+        <EditText
+            android:id="@+id/edit_price"
+            android:hint="@string/enter_price"
+            android:textSize="22dp"
+            android:layout_weight="12"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:ems="10"
+            android:inputType="numberDecimal"/>
+
+        <EditText
+            android:id="@+id/edit_all_info"
+            android:textSize="25dp"
+            android:hint="@string/short_text"
+            android:layout_weight="25"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:ems="10"
+            android:inputType="textMultiLine" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="11">
+
+            <Button
+                android:id="@+id/button_choose_date"
+                android:text="@string/enter_date"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/button_choose_place"
+                android:text="@string/choose_place"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_add_create_event"
+            android:text="@string/add_event"
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+
+        <FrameLayout
+            android:layout_weight="14"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

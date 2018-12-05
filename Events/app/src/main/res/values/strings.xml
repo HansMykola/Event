@@ -1,0 +1,30 @@
+<resources>
+    <string name="search">Search</string>
+    <string name="create">Create</string>
+    <string name="home">Home</string>
+    <string name="subscriptions">Підписки</string>
+    <string name="my_events">Мої підписки</string>
+    <string name="show_map">Показати</string>
+    <string name="app_name">AndroidEvent</string>
+    <string name="enter_place_event">Введіть місце проведення події</string>
+    <string name="here_you">Тут ви</string>
+    <string name="choose">Вибрати</string>
+    <string name="add_event">Додати</string>
+    <string name="choose_place">Вибрати місце</string>
+    <string name="enter_name">Введіть назву</string>
+    <string name="enter_price">Введіть ціну</string>
+    <string name="enter_date">Введіть дату</string>
+    <string name="short_text">Короткий опис</string>
+    <string name="search_by_params">Шукати</string>
+    <string name="delete_event">Видалити</string>
+    <string name="update_event">Оновити</string>
+    <string name="leave">Вийти</string>
+
+    <string-array name="category">
+        <item>Мистецтво</item>
+        <item>Спорт</item>
+        <item>IT</item>
+        <item>Наука</item>
+        <item>Благодійність</item>
+    </string-array>
+</resources>
