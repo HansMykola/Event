@@ -3,7 +3,7 @@ package com.important.events.mykola.kaiser.events.ui.create;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -30,7 +30,6 @@ import com.important.events.mykola.kaiser.events.R;
 import com.important.events.mykola.kaiser.events.file.FileHelper;
 import com.important.events.mykola.kaiser.events.model.Event;
 import com.important.events.mykola.kaiser.events.model.interface_model.IConnectCreateFragment;
-import com.important.events.mykola.kaiser.events.model.interface_model.IConnectHomeFragment;
 import com.important.events.mykola.kaiser.events.model.interface_model.IUpdateAdapter;
 import com.important.events.mykola.kaiser.events.ui.map.MapActivity;
 import com.squareup.picasso.Picasso;
@@ -48,11 +47,10 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
     private Spinner mSpinnerCategory;
     private ImageView mImageEvent;
     private Intent mIntent;
-    private DatePickerDialog.OnDateSetListener mDateSetlistener;
+    DatePickerDialog mDatePiker;
 
     public CreateFragment()
     {
-        Log.d("Home", "Create CreateFragment");
         if (mPresenter == null)
         {
             Toast.makeText(MyApp.get().getBaseContext(), "false", Toast.LENGTH_LONG).show();
@@ -70,7 +68,6 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
     @SuppressLint("ValidFragment")
     public CreateFragment(IUpdateAdapter mUpdateAdapter, IConnectCreateFragment iConnectHomeFragment)
     {
-        Log.d("Home", "Create CreateFragment");
         updateAdapter = mUpdateAdapter;
         mIConnectCreateFragment = iConnectHomeFragment;
     }
@@ -78,7 +75,6 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
     @ProvidePresenter
     public CreateFragmentPresenter constructorPresenter()
     {
-        Log.d("Home", "Create CreateFragmentPresenter");
         return new CreateFragmentPresenter(updateAdapter, mIConnectCreateFragment);
     }
 
@@ -89,7 +85,6 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        Log.d("Home", "Create onCreateView");
         View view = inflater.inflate(R.layout.main_create_fragment, container, false);
 
         mEditName = view.findViewById(R.id.edit_name_event);
@@ -135,7 +130,6 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
     @Override
     public void onClick(View v)
     {
-        Log.d("Home", "Create onClick");
         switch (v.getId())
         {
             case R.id.button_choose_date:
@@ -160,6 +154,7 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
                             Double.valueOf(mEditPrice.getText().toString()),
                             mEditAllInfo.getText().toString(),
                             mImageEvent.getDrawingCache());
+                    mImageEvent.destroyDrawingCache();
                 }
                 else
                 {
@@ -178,27 +173,27 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
 
     private void createDatePickerDialog()
     {
-        Log.d("Home", "Create createDatePickerDialog");
         Calendar calendar = Calendar.getInstance();
-        DatePickerDialog dialog = new DatePickerDialog(getContext(),
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        mDatePiker = new DatePickerDialog(getContext(),
                 R.style.Theme_Design_Light,
-                mDateSetlistener,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH));
+                (view, year1, month1, dayOfMonth) -> {
+                    mPresenter.setDate(dayOfMonth + "-" + (month + 1) + "-" + year);
+                },
+                year, month, day);
 
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-        dialog.show();
 
-        mDateSetlistener = (view, year, month, dayOfMonth) -> {
-            mPresenter.setDate(dayOfMonth + "-" + (month + 1) + "-" + year);
-        };
+
+        mDatePiker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        mDatePiker.show();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        Log.d("Home", "Create onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode)
@@ -232,18 +227,19 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
     @Override
     public void clearPage()
     {
-        Log.d("Home", "Create clearPage");
         mEditName.setText("");
         mEditPrice.setText("");
         mEditAllInfo.setText("");
         mSpinnerCategory.setSelection(0);
-        mImageEvent.setImageResource(0);
+
+        Resources resources = MyApp.get().getResources();
+        mImageEvent.setImageDrawable(resources
+                .getDrawable(R.drawable.question1,null));
     }
 
     @Override
     public void editEvent(Event event, FileHelper mFileHelper)
     {
-        Log.d("Home", "Create editEvent");
         mEditName.setText(event.getName());
         mEditPrice.setText(String.valueOf(event.getPrice()));
         mEditAllInfo.setText(event.getDescription());

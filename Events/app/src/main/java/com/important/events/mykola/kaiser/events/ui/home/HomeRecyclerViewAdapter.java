@@ -88,20 +88,6 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
         });
 
         viewHolder.mImageEvent.setOnClickListener(v -> {
-            /*Intent intent = new Intent("ReadEvent");
-
-            if (mEvents.get(i).getIdOwner().equals(mUser.getId()))
-            {
-                intent.putExtra(ReadActivity.KEY_ACTION, true);
-            }
-            else
-            {
-                intent.putExtra(ReadActivity.KEY_ACTION, false);
-            }
-
-            intent.putExtra(ReadActivity.READ , mEvents.get(i));
-            viewHolder.startIntent(intent);*/
-
             mIReadAction.startReadOrUpdate(mEvents.get(i), i,
                     mEvents.get(i).getIdOwner().equals(mUser.getId()));
         });

@@ -3,6 +3,8 @@ package com.important.events.mykola.kaiser.events.ui.create;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -27,7 +29,6 @@ public class CreateFragmentPresenter extends MvpPresenter<ICreateFragmentView> i
 
     public CreateFragmentPresenter(IUpdateAdapter update, IConnectCreateFragment iConnectHomeFragment)
     {
-        Log.d("Home", "Create CreateFragmentPresenter");
         mUpdateAdapter = update;
         mUpdate = false;
         mEvent = new Event();
@@ -42,9 +43,9 @@ public class CreateFragmentPresenter extends MvpPresenter<ICreateFragmentView> i
     public void setEventDate(String name,
                              double price,
                              String description,
-                             Bitmap bitmap)
-    {
-        Log.d("Home", "Create setEventDate");
+                             Bitmap bitmap) {
+
+
         int index = MyApp.get().getUser().lookForIndexEvent(mEvent);
 
         mEvent.setIdOwner(MyApp.get().getUser().getId());
@@ -65,11 +66,11 @@ public class CreateFragmentPresenter extends MvpPresenter<ICreateFragmentView> i
             mEvent.setId(MyApp.get().getDatabaseEvent().getLastIdEvent());
             MyApp.get().getUser().setAMyEvent(mEvent);
 
-            mEvent = new Event();
             mUri = null;
         }
         else
         {
+            mUpdate = false;
             if (mUri != null)
             {
                 String elem = mUri.toString();
@@ -82,19 +83,18 @@ public class CreateFragmentPresenter extends MvpPresenter<ICreateFragmentView> i
             MyApp.get().getDatabaseEvent().updateEvent(mEvent);
         }
 
+
         getViewState().clearPage();
         mUpdateAdapter.updateAdapter();
     }
 
     public void setmEvent(Event mEvent)
     {
-        Log.d("Home", "Create setmEvent");
         this.mEvent = mEvent;
     }
 
     public boolean canAddEvent(String name, String price, String description)
     {
-        Log.d("Home", "Create canAddEvent");
         if ((mEvent.getDate() != null)
                 && (mEvent.getLocation() != null)
                 && (name != null)
@@ -112,38 +112,32 @@ public class CreateFragmentPresenter extends MvpPresenter<ICreateFragmentView> i
 
     public void setCategory(String category)
     {
-        Log.d("Home", "Create setCategory");
         mEvent.setCategory(category);
     }
 
     public void setAddress(String address)
     {
-        Log.d("Home", "Create setAddress");
         mEvent.setLocation(address);
     }
 
     public String getAddress()
     {
-        Log.d("Home", "Create getAddress");
         return mEvent.getLocation();
     }
 
     public void setDate(String date)
     {
-        Log.d("Home", "Create setDate");
         mEvent.setDate(date);
     }
 
     public void setUri(Uri uri)
     {
-        Log.d("Home", "Create setUri");
         this.mUri = uri;
         getViewState().openImage(uri);
     }
 
     @Override
     public void updateViewCreate(Event event, boolean change) {
-        Log.d("Home", "Create sendArguments");
         mEvent.setId(event.getId());
         mEvent.setIdOwner(event.getIdOwner());
         mEvent.setName(event.getName());
@@ -161,6 +155,7 @@ public class CreateFragmentPresenter extends MvpPresenter<ICreateFragmentView> i
 
     @Override
     public void clearWhenGoNextPage() {
+        mEvent = new Event();
         getViewState().clearPage();
     }
 }

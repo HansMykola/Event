@@ -60,7 +60,6 @@ public class SearchFragment extends MvpAppCompatFragment implements ISearchFragm
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        Log.d("Home", "Search onCreateView");
         View view = inflater.inflate(R.layout.main_search_fragment, container, false);
 
         mImageButtonSearch = view.findViewById(R.id.image_button_search);
@@ -93,7 +92,6 @@ public class SearchFragment extends MvpAppCompatFragment implements ISearchFragm
     @Override
     public void onClick(View v)
     {
-        Log.d("Home", "Search onClick");
         switch (v.getId())
         {
             case R.id.image_button_search:
@@ -117,7 +115,6 @@ public class SearchFragment extends MvpAppCompatFragment implements ISearchFragm
 
     @Override
     public void changeAdapter(ArrayList<Event> events) {
-        Log.d("Home", "Search changeAdapter");
         mAdapterFoundEvents.setMEvents(events);
     }
 }

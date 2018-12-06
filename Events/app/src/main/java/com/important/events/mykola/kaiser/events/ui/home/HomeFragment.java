@@ -65,7 +65,6 @@ public class HomeFragment extends MvpAppCompatFragment implements IHomeFragmentV
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        Log.d("Home", "Home onCreateView");
         View view = inflater.inflate(R.layout.main_home_fragment, container, false);
 
         mFaceCircleImage = view.findViewById(R.id.image_face);
@@ -89,7 +88,6 @@ public class HomeFragment extends MvpAppCompatFragment implements IHomeFragmentV
         mImageExit.setOnClickListener(v -> mPresenter.signOut());
 
         mPresenter.connectFragment();
-        Log.d("Home", "Home connectFragment");
 
         return view;
     }
@@ -108,7 +106,6 @@ public class HomeFragment extends MvpAppCompatFragment implements IHomeFragmentV
     @Override
     public void updateProfile(String uri, String name)
     {
-        Log.d("Home", "Home updateProfile");
         Picasso.get().invalidate(uri);
         Picasso.get().load(uri).into(mFaceCircleImage);
         mFullName.setText(name);
@@ -117,7 +114,6 @@ public class HomeFragment extends MvpAppCompatFragment implements IHomeFragmentV
     @Override
     public void changeRecyclerView(ArrayList<Event> events)
     {
-        Log.d("Home", "Home changeRecyclerView");
         mAdapter.setListEvents(events);
     }
 }

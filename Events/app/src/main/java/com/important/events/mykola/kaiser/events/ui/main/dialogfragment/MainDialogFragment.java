@@ -61,7 +61,6 @@ public class MainDialogFragment extends MvpAppCompatDialogFragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        Log.d("Home", "DialogMain onCreateView");
         View view = inflater.inflate(R.layout.main_dialog_fragment, container, false);
 
         if (mIApiClient.getAPIClient() == null)
@@ -71,7 +70,6 @@ public class MainDialogFragment extends MvpAppCompatDialogFragment
                     .requestEmail()
                     .build();
 
-            Log.d("Home", "DialogMain S1");
             mApiClient = new GoogleApiClient
                     .Builder(MyApp.get())
                     .enableAutoManage(getActivity(), this)
@@ -85,9 +83,6 @@ public class MainDialogFragment extends MvpAppCompatDialogFragment
             mApiClient = mIApiClient.getAPIClient();
         }
 
-
-
-        Log.d("Home", "DialogMain S2");
         SignInButton signInButton = view.findViewById(R.id.button_sign_in);
         signInButton.setOnClickListener(v -> signIn());
 
@@ -96,21 +91,18 @@ public class MainDialogFragment extends MvpAppCompatDialogFragment
 
     public void signIn()
     {
-        Log.d("Home", "DialogMain signIn");
         Intent intent = Auth.GoogleSignInApi.getSignInIntent(mApiClient);
         startActivityForResult(intent, REQUEST_CODE);
     }
 
     public void signOut()
     {
-        Log.d("Home", "DialogMain signOut");
         Auth.GoogleSignInApi.signOut(mApiClient).setResultCallback(status -> {});
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        Log.d("Home", "DialogMain onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode)
         {

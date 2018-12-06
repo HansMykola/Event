@@ -15,13 +15,11 @@ public class MainViewPagersAdapter extends FragmentStatePagerAdapter
     public MainViewPagersAdapter(FragmentManager fm)
     {
         super(fm);
-        Log.d("Main", "MainViewPagersAdapter");
         mFragments = new ArrayList<>();
     }
 
     public void addFragments(ArrayList<MvpAppCompatFragment> fragments)
     {
-        Log.d("Main", "addFragments");
         mFragments.clear();
         mFragments.addAll(fragments);
         notifyDataSetChanged();

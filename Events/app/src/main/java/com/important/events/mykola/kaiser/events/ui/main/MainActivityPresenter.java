@@ -51,7 +51,6 @@ public class MainActivityPresenter extends MvpPresenter<IMainActivityView>
     {
         mApiClient = null;
         canClear = false;
-        Log.d("Home", "Main MainActivityPresenter");
         mFileHelper = new FileHelper();
         mIsUser = mFileHelper.isUserBin();
         initViewPager();
@@ -72,13 +71,11 @@ public class MainActivityPresenter extends MvpPresenter<IMainActivityView>
 
     public boolean isUser()
     {
-        Log.d("Home", "Main isUser");
         return mIsUser;
     }
 
     public void initializationUser()
     {
-        Log.d("Home", "Main initializationUser");
         SQLiteDatabaseEvent database = MyApp.get().getDatabaseEvent();
 
         User user = MyApp.get().getUser();
@@ -117,7 +114,6 @@ public class MainActivityPresenter extends MvpPresenter<IMainActivityView>
     @Override
     public void userActivation()
     {
-        Log.d("Home", "Main userActivation");
         initializationUser();
         getViewState().visibleDisplay();
 
@@ -189,9 +185,22 @@ public class MainActivityPresenter extends MvpPresenter<IMainActivityView>
         mIUpdateRecyclerViewSearch.updateRecyclerViewSearch();
     }
 
+    public void updateSubscribers()
+    {
+        try
+        {
+            ((HomeFragment)mFragments.get(1)).mPresenter.changeList(false);
+        }
+        catch (Exception e)
+        { }
+    }
+
     public void clearCreatePage()
     {
-        mIUpdateViewCreate.clearWhenGoNextPage();
+        if (mIUpdateViewCreate != null)
+        {
+            mIUpdateViewCreate.clearWhenGoNextPage();
+        }
     }
 
     @Override

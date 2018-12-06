@@ -44,7 +44,6 @@ public class MainActivity extends MvpAppCompatActivity implements IMainActivityV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.d("Home", "Main onCreate");
         mMainPage = findViewById(R.id.main_frame_layout);
 
         mViewPager = findViewById(R.id.main_view_page);
@@ -68,10 +67,12 @@ public class MainActivity extends MvpAppCompatActivity implements IMainActivityV
                         mNavigation.setSelectedItemId(R.id.search_page);
                         break;
                     case 1:
+                        mPresenter.clearCreatePage();
+                        mPresenter.updateSubscribers();
                         mNavigation.setSelectedItemId(R.id.home_page);
                         break;
                     case 2:
-                        mPresenter.clearCreatePage();
+                        mPresenter.updateSubscribers();
                         mNavigation.setSelectedItemId(R.id.create_page);
                         break;
                 }
@@ -108,14 +109,12 @@ public class MainActivity extends MvpAppCompatActivity implements IMainActivityV
     @Override
     public void addNewFragments(ArrayList<MvpAppCompatFragment> fragments)
     {
-        Log.d("Home", "Main addNewFragments");
         mAdapter.addFragments(fragments);
     }
 
     @Override
     public void startWork()
     {
-        Log.d("Home", "Main startWork isUser =" + mPresenter.isUser());
         if (!mPresenter.isUser())
         {
             mMainPage.setVisibility(View.INVISIBLE);
@@ -131,7 +130,6 @@ public class MainActivity extends MvpAppCompatActivity implements IMainActivityV
     @Override
     public void turnOffPage()
     {
-        Log.d("Home", "Main turnOffPage");
         mViewPager.setCurrentItem(1);
     }
 

@@ -1,12 +1,10 @@
 package com.important.events.mykola.kaiser.events.ui.home;
 
-import android.util.Log;
-
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.important.events.mykola.kaiser.events.MyApp;
-import com.important.events.mykola.kaiser.events.model.interface_model.IConnectHomeFragment;
 import com.important.events.mykola.kaiser.events.model.User;
+import com.important.events.mykola.kaiser.events.model.interface_model.IConnectHomeFragment;
 import com.important.events.mykola.kaiser.events.model.interface_model.IReadAction;
 import com.important.events.mykola.kaiser.events.model.interface_model.IUpdateViewHome;
 
@@ -20,7 +18,6 @@ public class HomeFragmentPresenter extends MvpPresenter<IHomeFragmentView> imple
 
     public HomeFragmentPresenter(IConnectHomeFragment connectFragment, IReadAction iReadAction)
     {
-        Log.d("Home", "Home HomeFragmentPresenter");
         user = MyApp.get().getUser();
         mConnectFragment = connectFragment;
         mIReadAction = iReadAction;
@@ -33,7 +30,6 @@ public class HomeFragmentPresenter extends MvpPresenter<IHomeFragmentView> imple
 
     public void changeList(boolean first)
     {
-        Log.d("Home", "Home changeList");
         if (first)
         {
             getViewState().changeRecyclerView(user.getSubscriptions());
@@ -52,7 +48,6 @@ public class HomeFragmentPresenter extends MvpPresenter<IHomeFragmentView> imple
     @Override
     public void updateViewHome()
     {
-        Log.d("Home", "Home updateViewHome");
         getViewState().updateProfile(user.getUri(), user.getName());
         changeList(false);
         getViewState().connectMinActivity(mIReadAction);

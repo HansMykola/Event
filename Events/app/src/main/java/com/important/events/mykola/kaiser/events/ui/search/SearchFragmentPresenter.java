@@ -27,7 +27,6 @@ public class SearchFragmentPresenter extends MvpPresenter<ISearchFragmentView>
 
     public SearchFragmentPresenter(IConnectSearchFragment iConnectSearchFragment)
     {
-        Log.d("Home", "Search SearchFragmentPresenter");
         mEvents = new ArrayList<>();
         mCreateP = false;
         mIConnectSearchFragment = iConnectSearchFragment;
@@ -35,7 +34,6 @@ public class SearchFragmentPresenter extends MvpPresenter<ISearchFragmentView>
 
     public void connect()
     {
-        Log.d("Home", "Search connect");
         if (!mCreateP)
         {
             mCreateP = true;
@@ -46,7 +44,6 @@ public class SearchFragmentPresenter extends MvpPresenter<ISearchFragmentView>
     @Override
     public void sendParams(String name, String price, String date)
     {
-        Log.d("Home", "Search sendParams");
         String select;
         String[] args;
 
@@ -74,7 +71,7 @@ public class SearchFragmentPresenter extends MvpPresenter<ISearchFragmentView>
         }
         else if ((name.trim().length() == 0) && (price.trim().length() != 0) && (date.trim().length() != 0))
         {
-            select = SQLiteDatabaseEvent.EVENT_KEY_PRICE + " =? AND "
+            select = SQLiteDatabaseEvent.EVENT_KEY_PRICE + " <=? AND "
                     + SQLiteDatabaseEvent.EVENT_KEY_DATE + " =? ";
 
             args = new String[]{ String.valueOf(price), date };
@@ -87,7 +84,7 @@ public class SearchFragmentPresenter extends MvpPresenter<ISearchFragmentView>
         }
         else if ((name.trim().length() == 0) && (price.trim().length() != 0) && (date.trim().length() == 0))
         {
-            select = SQLiteDatabaseEvent.EVENT_KEY_PRICE + " =? ";
+            select = SQLiteDatabaseEvent.EVENT_KEY_PRICE + " <=? ";
 
             args = new String[]{ String.valueOf(price) };
         }
@@ -108,25 +105,13 @@ public class SearchFragmentPresenter extends MvpPresenter<ISearchFragmentView>
 
     @Override
     public void updateRecyclerViewSearch() {
-        Log.d("Home", "Search updateRecyclerViewSearch");
         mDatabaseEvent = MyApp.get().getDatabaseEvent();
-        String idUser = MyApp.get().getUser().getId();
-
-        /*if (idUser != null)
-        {
-            mEvents = mDatabaseEvent.getEvents(idUser, false);
-            mEvents.addAll(MyApp.get().getUser().getMyEvents());
-            mEvents.addAll(MyApp.get().getUser().getSubscriptions());
-        }*/
-
         mEvents = mDatabaseEvent.getAllEvents(null, null);
-
         getViewState().changeAdapter(mEvents);
     }
 
     @Override
     public void chooseCategory(String name) {
-        Log.d("Home", "Search chooseCategory");
         mEvents = mDatabaseEvent.getAllEvents(SQLiteDatabaseEvent.EVENT_KEY_CATEGORY + " =? ",
                 new String[] { name });
         getViewState().changeAdapter(mEvents);
@@ -134,8 +119,6 @@ public class SearchFragmentPresenter extends MvpPresenter<ISearchFragmentView>
 
     public void searchForName(String name)
     {
-        Log.d("Home", "Search searchForName");
-
         mEvents = mDatabaseEvent.getAllEvents(SQLiteDatabaseEvent.EVENT_KEY_NAME + " =? ",
                 new String[] { name });
         getViewState().changeAdapter(mEvents);

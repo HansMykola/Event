@@ -33,7 +33,6 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
 
     public EventsRecyclerViewAdapter()
     {
-        Log.d("Home", "Search EventsRecyclerViewAdapter");
         mDatabaseEvent = MyApp.get().getDatabaseEvent();
         mFileHelper = new FileHelper();
         mEvents = new ArrayList<>();
@@ -43,7 +42,6 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i)
     {
-        Log.d("Home", "Search onCreateViewHolder");
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.home_recycler_element,
                         viewGroup,
@@ -54,7 +52,6 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i)
     {
-        Log.d("Home", "Search onBindViewHolder");
         Picasso.get().load(mFileHelper.readImage(mEvents.get(i).getName())).into(viewHolder.mImageEvent);
 
 
@@ -74,6 +71,12 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
             Resources resources = MyApp.get().getResources();
             viewHolder.mToSubscribe.setImageDrawable(resources
                                     .getDrawable(R.drawable.ic_subscribe_turned_in_black_24dp,null));
+        }
+        else
+        {
+            Resources resources = MyApp.get().getResources();
+            viewHolder.mToSubscribe.setImageDrawable(resources
+                    .getDrawable(R.drawable.ic_add_circle_black_24dp,null));
         }
 
         viewHolder.mToSubscribe.setOnClickListener(v -> {
@@ -99,26 +102,6 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
                                     R.drawable.ic_add_circle_black_24dp,
                                     null));
                 }
-
-                /*if (!(user.getSubscriptions().contains(mEvents.get(i)))
-                        && !(user.getMyEvents().contains(mEvents.get(i))))
-                {
-                    user.setASubscription(mEvents.get(i));
-                    ((ImageView) v).setImageDrawable(MyApp.get()
-                            .getResources()
-                            .getDrawable(
-                                    R.drawable.ic_subscribe_turned_in_black_24dp,
-                                    null));
-                }
-                else
-                {
-                    user.getSubscriptions().remove(mEvents.get(i));
-                    ((ImageView) v).setImageDrawable(MyApp.get()
-                            .getResources()
-                            .getDrawable(
-                                    R.drawable.ic_add_circle_black_24dp,
-                                    null));
-                }*/
             }
         });
 
@@ -139,7 +122,6 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
 
     public void setMEvents(ArrayList<Event> events)
     {
-        Log.d("Home", "Search setMEvents");
         mEvents.clear();
         mEvents.addAll(events);
         notifyDataSetChanged();

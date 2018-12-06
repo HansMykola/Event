@@ -50,7 +50,6 @@ public class DialogFragmentSearch extends DialogFragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        Log.d("Home", "DialogSearch onCreateView");
         View view = inflater.inflate(R.layout.search_dialog_setting_search, container, false);
 
         mDate = "";
@@ -74,7 +73,6 @@ public class DialogFragmentSearch extends DialogFragment
 
     private void createDatePickerDialog()
     {
-        Log.d("Home", "DialogSearch createDatePickerDialog");
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog dialog = new DatePickerDialog(MyApp.get(),
                 R.style.Theme_AppCompat_DayNight_DarkActionBar,
