@@ -2,9 +2,6 @@ package com.important.events.mykola.kaiser.events.ui.create;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -12,13 +9,11 @@ import com.important.events.mykola.kaiser.events.MyApp;
 import com.important.events.mykola.kaiser.events.file.FileHelper;
 import com.important.events.mykola.kaiser.events.model.Event;
 import com.important.events.mykola.kaiser.events.model.interface_model.IConnectCreateFragment;
-import com.important.events.mykola.kaiser.events.model.interface_model.IConnectHomeFragment;
 import com.important.events.mykola.kaiser.events.model.interface_model.IUpdateAdapter;
 import com.important.events.mykola.kaiser.events.model.interface_model.IUpdateViewCreate;
 
 @InjectViewState
-public class CreateFragmentPresenter extends MvpPresenter<ICreateFragmentView> implements IUpdateViewCreate
-{
+public class CreateFragmentPresenter extends MvpPresenter<ICreateFragmentView> implements IUpdateViewCreate {
     private String mFormerName;
     private Event mEvent;
     private Uri mUri;
@@ -27,23 +22,22 @@ public class CreateFragmentPresenter extends MvpPresenter<ICreateFragmentView> i
     private IUpdateAdapter mUpdateAdapter;
     private IConnectCreateFragment mIConnectHomeFragment;
 
-    public CreateFragmentPresenter(IUpdateAdapter update, IConnectCreateFragment iConnectHomeFragment)
-    {
+    CreateFragmentPresenter(IUpdateAdapter update, IConnectCreateFragment iConnectHomeFragment) {
         mUpdateAdapter = update;
         mUpdate = false;
         mEvent = new Event();
         mIConnectHomeFragment = iConnectHomeFragment;
     }
 
-    public void connectFragment()
-    {
+    void connectFragment() {
         mIConnectHomeFragment.connectCreateFragment();
     }
 
-    public void setEventDate(String name,
-                             double price,
-                             String description,
-                             Bitmap bitmap) {
+    void setEventDate(
+            String name,
+            double price,
+            String description,
+            Bitmap bitmap) {
 
 
         int index = MyApp.get().getUser().lookForIndexEvent(mEvent);
@@ -56,8 +50,7 @@ public class CreateFragmentPresenter extends MvpPresenter<ICreateFragmentView> i
 
         FileHelper fileHelper = new FileHelper();
 
-        if (!mUpdate)
-        {
+        if (!mUpdate) {
             fileHelper.saveImage(bitmap, mEvent.getName());
 
             String elem = mUri.toString();
@@ -67,12 +60,9 @@ public class CreateFragmentPresenter extends MvpPresenter<ICreateFragmentView> i
             MyApp.get().getUser().setAMyEvent(mEvent);
 
             mUri = null;
-        }
-        else
-        {
+        } else {
             mUpdate = false;
-            if (mUri != null)
-            {
+            if (mUri != null) {
                 String elem = mUri.toString();
                 mEvent.setUri(elem);
             }
@@ -88,50 +78,35 @@ public class CreateFragmentPresenter extends MvpPresenter<ICreateFragmentView> i
         mUpdateAdapter.updateAdapter();
     }
 
-    public void setmEvent(Event mEvent)
-    {
+    void setmEvent(Event mEvent) {
         this.mEvent = mEvent;
     }
 
-    public boolean canAddEvent(String name, String price, String description)
-    {
-        if ((mEvent.getDate() != null)
+    boolean canAddEvent(String name, String price, String description) {
+        return (mEvent.getDate() != null)
                 && (mEvent.getLocation() != null)
                 && (name != null)
-                && (price !=null)
-                && (description != null)
-                )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+                && (price != null)
+                && (description != null);
     }
 
-    public void setCategory(String category)
-    {
+    void setCategory(String category) {
         mEvent.setCategory(category);
     }
 
-    public void setAddress(String address)
-    {
+    void setAddress(String address) {
         mEvent.setLocation(address);
     }
 
-    public String getAddress()
-    {
+    String getAddress() {
         return mEvent.getLocation();
     }
 
-    public void setDate(String date)
-    {
+    public void setDate(String date) {
         mEvent.setDate(date);
     }
 
-    public void setUri(Uri uri)
-    {
+    public void setUri(Uri uri) {
         this.mUri = uri;
         getViewState().openImage(uri);
     }

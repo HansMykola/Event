@@ -1,7 +1,5 @@
 package com.important.events.mykola.kaiser.events.ui.main;
 
-import android.util.Log;
-
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.MvpPresenter;
@@ -30,9 +28,9 @@ import java.util.ArrayList;
 
 @InjectViewState
 public class MainActivityPresenter extends MvpPresenter<IMainActivityView>
-                                    implements IUserActivation, IUpdateAdapter, IConnectHomeFragment,
-                                    IReadAction, IConnectCreateFragment, IConnectSearchFragment, IApiClient
-{
+        implements IUserActivation, IUpdateAdapter, IConnectHomeFragment,
+        IReadAction, IConnectCreateFragment, IConnectSearchFragment, IApiClient {
+    // TODO This is bad. Don't keep links to fragments - they're views, it can lead to memory leak!
     private ArrayList<MvpAppCompatFragment> mFragments;
     private FileHelper mFileHelper;
 
@@ -43,12 +41,10 @@ public class MainActivityPresenter extends MvpPresenter<IMainActivityView>
     private IUpdateAdapter mIUpdateAdapter;
     private IUpdateViewCreate mIUpdateViewCreate;
     private IUpdateViewHome mIUpdateViewHome;
-    private IUpdateRecyclerViewSearch mIUpdateRecyclerViewSearch;
 
     private GoogleApiClient mApiClient;
 
-    public MainActivityPresenter()
-    {
+    MainActivityPresenter() {
         mApiClient = null;
         canClear = false;
         mFileHelper = new FileHelper();
@@ -57,9 +53,9 @@ public class MainActivityPresenter extends MvpPresenter<IMainActivityView>
         getViewState().startWork();
     }
 
-    public void initViewPager()
-    {
+    private void initViewPager() {
         mFragments = new ArrayList<>();
+
 
         mFragments.add(new SearchFragment(this));
         mFragments.add(new HomeFragment(this, this));
@@ -69,19 +65,16 @@ public class MainActivityPresenter extends MvpPresenter<IMainActivityView>
         getViewState().turnOffPage();
     }
 
-    public boolean isUser()
-    {
+    public boolean isUser() {
         return mIsUser;
     }
 
-    public void initializationUser()
-    {
+    private void initializationUser() {
         SQLiteDatabaseEvent database = MyApp.get().getDatabaseEvent();
 
         User user = MyApp.get().getUser();
 
-        if (user.getMyEvents().size() == 0)
-        {
+        if (user.getMyEvents().size() == 0) {
             if (mIsUser) {
                 User newUser = database.getUser(mFileHelper.readUserBin());
 
@@ -91,10 +84,9 @@ public class MainActivityPresenter extends MvpPresenter<IMainActivityView>
 
                 user.searchMyEvent(database.getEvents(user.getId(), true));
 
-               mIsUser = true;
+                mIsUser = true;
             } else {
-                if (database.getUser(user.getId()) != null)
-                {
+                if (database.getUser(user.getId()) != null) {
                     database.insertUser(user);
                 }
             }
@@ -102,47 +94,42 @@ public class MainActivityPresenter extends MvpPresenter<IMainActivityView>
         mFileHelper.writeUserBin(user.getId());
     }
 
-    public void setmCanOpenActivity(boolean mCanOpenActivity)
-    {
+    void setmCanOpenActivity(boolean mCanOpenActivity) {
         this.mCanOpenActivity = mCanOpenActivity;
     }
 
-    public boolean ismCanOpenActivity() {
+    boolean ismCanOpenActivity() {
         return mCanOpenActivity;
     }
 
     @Override
-    public void userActivation()
-    {
+    public void userActivation() {
         initializationUser();
         getViewState().visibleDisplay();
 
-        if (!mIsUser)
-        {
+        if (!mIsUser) {
             mIUpdateViewHome.updateViewHome();
             mIsUser = true;
         }
     }
 
     @Override
-    public void updateAdapter()
-    {
+    public void updateAdapter() {
         getViewState().turnOffPage();
         mIUpdateViewHome.updateHomeAdapter();
     }
 
     @Override
-    public void connectFragment(HomeFragmentPresenter HomePresenter)
-    {
+    public void connectFragment(HomeFragmentPresenter HomePresenter) {
         mIUpdateViewHome = HomePresenter;
         mIUpdateViewHome.updateViewHome();
     }
 
-    public boolean isCanClear() {
+     boolean isCanClear() {
         return canClear;
     }
 
-    public void setCanClear(boolean canClear) {
+     void setCanClear(boolean canClear) {
         this.canClear = canClear;
     }
 
@@ -165,40 +152,34 @@ public class MainActivityPresenter extends MvpPresenter<IMainActivityView>
 
     @Override
     public void connectCreateFragment() {
-        mIUpdateViewCreate = ((CreateFragment)mFragments.get(2)).mPresenter;
+        mIUpdateViewCreate = ((CreateFragment) mFragments.get(2)).mPresenter;
     }
 
-    public void changeElement(int index)
-    {
+    void changeElement(int index) {
         mIUpdateViewCreate.updateViewCreate(MyApp.get().getUser().getMyEvents().get(index), true);
     }
 
-    public void updateSearchAdapter()
-    {
+    void updateSearchAdapter() {
         mIUpdateAdapter.updateAdapter();
     }
 
     @Override
     public void connectSearchFragment() {
-        mIUpdateRecyclerViewSearch = ((SearchFragment)mFragments.get(0)).mPresenter;
-        mIUpdateAdapter = ((SearchFragment)mFragments.get(0)).mPresenter;
+        IUpdateRecyclerViewSearch mIUpdateRecyclerViewSearch = ((SearchFragment) mFragments.get(0)).mPresenter;
+        mIUpdateAdapter = ((SearchFragment) mFragments.get(0)).mPresenter;
         mIUpdateRecyclerViewSearch.updateRecyclerViewSearch();
     }
 
-    public void updateSubscribers()
-    {
-        try
-        {
-            ((HomeFragment)mFragments.get(1)).mPresenter.changeList(false);
+    void updateSubscribers() {
+        try {
+            ((HomeFragment) mFragments.get(1)).mPresenter.changeList(false);
+        } catch (Exception e) {
+            // TODO e.printStackTrace()
         }
-        catch (Exception e)
-        { }
     }
 
-    public void clearCreatePage()
-    {
-        if (mIUpdateViewCreate != null)
-        {
+    void clearCreatePage() {
+        if (mIUpdateViewCreate != null) {
             mIUpdateViewCreate.clearWhenGoNextPage();
         }
     }

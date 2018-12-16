@@ -18,17 +18,19 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRecyclerViewAdapter.ViewHolder>
-{
+public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRecyclerViewAdapter.ViewHolder> {
+    // TODO It's bad to initiate data in adapter. It's made for viewing, not for initialization.
+    // TODO Also, better would be to use list of category objects, not separate lists for each field (like image, title).
     private IChooseCategory mIChooseCategory;
     private ArrayList<Drawable> mListImageEvent;
     private String[] mtextCategory;
 
-    public CategoryRecyclerViewAdapter(IChooseCategory chooseCategory)
-    {
+    CategoryRecyclerViewAdapter(IChooseCategory chooseCategory) {
         mListImageEvent = new ArrayList<>();
 
         Resources resources = MyApp.get().getResources();
+        // TODO Do not use Drawables in code, if you can avoid it.
+        // TODO Here, you can use drawable IDs instead, and setDrawableResource on ImageView.
         mListImageEvent.add(resources.getDrawable(R.drawable.picture_art, null));
         mListImageEvent.add(resources.getDrawable(R.drawable.picture_sport, null));
         mListImageEvent.add(resources.getDrawable(R.drawable.picture_it, null));
@@ -42,40 +44,34 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i)
-    {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup
-                                        .getContext())
-                                        .inflate(R.layout.search_category_recycler_element,
-                                                            viewGroup,
-                                                false);
+                .getContext())
+                .inflate(R.layout.search_category_recycler_element,
+                        viewGroup,
+                        false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i)
-    {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.mCircleCategory.setImageDrawable(mListImageEvent.get(i));
         viewHolder.mTextCategory.setText(mtextCategory[i]);
-        viewHolder.mLinearCard.setOnClickListener(v -> {
-            mIChooseCategory.chooseCategory(mtextCategory[i]);
-        });
+        viewHolder.mLinearCard.setOnClickListener(v ->
+                mIChooseCategory.chooseCategory(mtextCategory[i]));
     }
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return mListImageEvent.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
-    {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private CircleImageView mCircleCategory;
         private LinearLayout mLinearCard;
         private TextView mTextCategory;
 
-        public ViewHolder(@NonNull View itemView)
-        {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             mCircleCategory = itemView.findViewById(R.id.image_circle_category);
             mTextCategory = itemView.findViewById(R.id.text_category_item);

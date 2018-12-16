@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,26 +36,19 @@ import com.squareup.picasso.Picasso;
 import java.util.Calendar;
 
 public class CreateFragment extends MvpAppCompatFragment implements ICreateFragmentView,
-                                                                    View.OnClickListener
-{
+        View.OnClickListener {
     private final static int REQUEST_CODE_IMAGE = 14;
     public final static int REQUEST_CODE_PLACE = 88;
 
     private EditText mEditName, mEditPrice, mEditAllInfo;
-    private Button mButtonDate, mButtonMap, mButtonAdd;
     private Spinner mSpinnerCategory;
     private ImageView mImageEvent;
-    private Intent mIntent;
     DatePickerDialog mDatePiker;
 
-    public CreateFragment()
-    {
-        if (mPresenter == null)
-        {
+    public CreateFragment() {
+        if (mPresenter == null) {
             Toast.makeText(MyApp.get().getBaseContext(), "false", Toast.LENGTH_LONG).show();
-        }
-        else
-        {
+        } else {
             Toast.makeText(MyApp.get().getBaseContext(), "true", Toast.LENGTH_LONG).show();
         }
 
@@ -66,15 +58,14 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
     private IConnectCreateFragment mIConnectCreateFragment;
 
     @SuppressLint("ValidFragment")
-    public CreateFragment(IUpdateAdapter mUpdateAdapter, IConnectCreateFragment iConnectHomeFragment)
-    {
+    // TODO Bad design - fragments should NOT have non-empty constructors.
+    public CreateFragment(IUpdateAdapter mUpdateAdapter, IConnectCreateFragment iConnectHomeFragment) {
         updateAdapter = mUpdateAdapter;
         mIConnectCreateFragment = iConnectHomeFragment;
     }
 
     @ProvidePresenter
-    public CreateFragmentPresenter constructorPresenter()
-    {
+    public CreateFragmentPresenter constructorPresenter() {
         return new CreateFragmentPresenter(updateAdapter, mIConnectCreateFragment);
     }
 
@@ -83,8 +74,7 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_create_fragment, container, false);
 
         mEditName = view.findViewById(R.id.edit_name_event);
@@ -95,75 +85,70 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
 
         mPresenter.setCategory(mSpinnerCategory.getItemAtPosition(1).toString());
 
-        mSpinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        mSpinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mPresenter.setCategory(parent.getItemAtPosition(position).toString());
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
 
         mImageEvent = view.findViewById(R.id.image_event);
-        mImageEvent.setOnClickListener(this::onClick);
+        mImageEvent.setOnClickListener(this);
 
-        mButtonDate = view.findViewById(R.id.button_choose_date);
-        mButtonDate.setOnClickListener(this::onClick);
+        Button mButtonDate = view.findViewById(R.id.button_choose_date);
+        mButtonDate.setOnClickListener(this);
 
-        mButtonMap = view.findViewById(R.id.button_choose_place);
-        mButtonMap.setOnClickListener(this::onClick);
+        Button mButtonMap = view.findViewById(R.id.button_choose_place);
+        mButtonMap.setOnClickListener(this);
 
-        mButtonAdd = view.findViewById(R.id.button_add_create_event);
-        mButtonAdd.setOnClickListener(this::onClick);
+        Button mButtonAdd = view.findViewById(R.id.button_add_create_event);
+        mButtonAdd.setOnClickListener(this);
 
         mPresenter.connectFragment();
 
         return view;
     }
 
+    // TODO this is bad practice, to catch all clicks in one method.
+    // TODO Use different methods for each view instead.
     @Override
-    public void onClick(View v)
-    {
-        switch (v.getId())
-        {
-            case R.id.button_choose_date:
-            {
+    public void onClick(View v) {
+        Intent mIntent;
+        switch (v.getId()) {
+            case R.id.button_choose_date: {
                 createDatePickerDialog();
                 break;
             }
-            case R.id.button_choose_place:
-            {
+            case R.id.button_choose_place: {
                 mIntent = new Intent("GoogleMapEvent");
                 startActivityForResult(mIntent, REQUEST_CODE_PLACE);
                 break;
             }
-            case R.id.button_add_create_event:
-            {
+            case R.id.button_add_create_event: {
                 if (mPresenter.canAddEvent(mEditName.getText().toString(),
                         mEditPrice.getText().toString(),
-                        mEditAllInfo.getText().toString()))
-                {
+                        mEditAllInfo.getText().toString())) {
                     mImageEvent.buildDrawingCache();
                     mPresenter.setEventDate(mEditName.getText().toString(),
                             Double.valueOf(mEditPrice.getText().toString()),
                             mEditAllInfo.getText().toString(),
+                            // TODO This is really bad.
+                            // TODO You have image URI, so just get a file from that URI, and copy it.
+                            // TODO Drawing cache isn't made for this.
+                            // TODO Anyway, avoid using Bitmap in your code. It's really memory-eating thing.
                             mImageEvent.getDrawingCache());
                     mImageEvent.destroyDrawingCache();
-                }
-                else
-                {
+                } else {
                     Toast.makeText(getContext(), "Ви не ввели всі дані", Toast.LENGTH_LONG).show();
                 }
                 break;
             }
-            case R.id.image_event:
-            {
+            case R.id.image_event: {
                 mIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
                 startActivityForResult(mIntent, REQUEST_CODE_IMAGE);
                 break;
@@ -171,8 +156,7 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
         }
     }
 
-    private void createDatePickerDialog()
-    {
+    private void createDatePickerDialog() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -180,11 +164,9 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
 
         mDatePiker = new DatePickerDialog(getContext(),
                 R.style.Theme_Design_Light,
-                (view, year1, month1, dayOfMonth) -> {
-                    mPresenter.setDate(dayOfMonth + "-" + (month + 1) + "-" + year);
-                },
+                (view, year1, month1, dayOfMonth) ->
+                        mPresenter.setDate(dayOfMonth + "-" + (month + 1) + "-" + year),
                 year, month, day);
-
 
 
         mDatePiker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
@@ -192,24 +174,18 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode)
-        {
-            case REQUEST_CODE_IMAGE:
-            {
-                if (data != null)
-                {
+        switch (requestCode) {
+            case REQUEST_CODE_IMAGE: {
+                if (data != null) {
                     mPresenter.setUri(data.getData());
                 }
                 break;
             }
-            case REQUEST_CODE_PLACE:
-            {
-                if (data != null)
-                {
+            case REQUEST_CODE_PLACE: {
+                if (data != null) {
                     mPresenter.setAddress(data.getStringExtra(MapActivity.KEY));
                     Toast.makeText(getContext(), mPresenter.getAddress(), Toast.LENGTH_LONG).show();
                 }
@@ -219,14 +195,12 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
     }
 
     @Override
-    public void openImage(Uri uri)
-    {
+    public void openImage(Uri uri) {
         mImageEvent.setImageURI(uri);
     }
 
     @Override
-    public void clearPage()
-    {
+    public void clearPage() {
         mEditName.setText("");
         mEditPrice.setText("");
         mEditAllInfo.setText("");
@@ -234,12 +208,11 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
 
         Resources resources = MyApp.get().getResources();
         mImageEvent.setImageDrawable(resources
-                .getDrawable(R.drawable.question1,null));
+                .getDrawable(R.drawable.question1, null));
     }
 
     @Override
-    public void editEvent(Event event, FileHelper mFileHelper)
-    {
+    public void editEvent(Event event, FileHelper mFileHelper) {
         mEditName.setText(event.getName());
         mEditPrice.setText(String.valueOf(event.getPrice()));
         mEditAllInfo.setText(event.getDescription());
@@ -247,10 +220,8 @@ public class CreateFragment extends MvpAppCompatFragment implements ICreateFragm
 
         int index = 0;
         String[] array = getResources().getStringArray(R.array.category);
-        for (int i = 0; i < array.length; ++i)
-        {
-            if (array[i].equals(event.getCategory()))
-            {
+        for (int i = 0; i < array.length; ++i) {
+            if (array[i].equals(event.getCategory())) {
                 index = i;
             }
         }

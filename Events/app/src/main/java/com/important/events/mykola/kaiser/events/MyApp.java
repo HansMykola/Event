@@ -20,7 +20,7 @@ public class MyApp extends Application
         super.onCreate();
         instance = this;
         user = new User();
-        databaseEvent = new SQLiteDatabaseEvent(getApplicationContext());
+        databaseEvent = new SQLiteDatabaseEvent(this);
     }
 
     public static MyApp get()

@@ -6,10 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,8 +26,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class HomeFragment extends MvpAppCompatFragment implements IHomeFragmentView
-{
+public class HomeFragment extends MvpAppCompatFragment implements IHomeFragmentView {
     private CircleImageView mFaceCircleImage;
     private RecyclerView mRecyclerEvents;
     private ImageView mImageExit;
@@ -43,28 +39,26 @@ public class HomeFragment extends MvpAppCompatFragment implements IHomeFragmentV
     public HomeFragmentPresenter mPresenter;
 
     @ProvidePresenter
-    public HomeFragmentPresenter constructorPresenter()
-    {
+    public HomeFragmentPresenter constructorPresenter() {
         return new HomeFragmentPresenter(mConnectFragment, mIReadAction);
     }
 
-    public HomeFragment()
-    { }
+    public HomeFragment() {
+    }
 
     private IConnectHomeFragment mConnectFragment;
     private IReadAction mIReadAction;
 
     @SuppressLint("ValidFragment")
-    public HomeFragment(IConnectHomeFragment connectFragment, IReadAction iReadAction)
-    {
+    // TODO Bad design - fragments should NOT have non-empty constructors.
+    public HomeFragment(IConnectHomeFragment connectFragment, IReadAction iReadAction) {
         mConnectFragment = connectFragment;
         mIReadAction = iReadAction;
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_home_fragment, container, false);
 
         mFaceCircleImage = view.findViewById(R.id.image_face);
@@ -98,22 +92,19 @@ public class HomeFragment extends MvpAppCompatFragment implements IHomeFragmentV
     }
 
     @Override
-    public void updateHomeAdapter()
-    {
+    public void updateHomeAdapter() {
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void updateProfile(String uri, String name)
-    {
+    public void updateProfile(String uri, String name) {
         Picasso.get().invalidate(uri);
         Picasso.get().load(uri).into(mFaceCircleImage);
         mFullName.setText(name);
     }
 
     @Override
-    public void changeRecyclerView(ArrayList<Event> events)
-    {
+    public void changeRecyclerView(ArrayList<Event> events) {
         mAdapter.setListEvents(events);
     }
 }

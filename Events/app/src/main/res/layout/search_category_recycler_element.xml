@@ -21,6 +21,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp" />
 
+        <!--TODO Do not use dp for text size (there's sp for it)-->
         <TextView
             android:id="@+id/text_category_item"
             android:layout_width="match_parent"
